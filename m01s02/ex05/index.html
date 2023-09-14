@@ -17,9 +17,29 @@
   <script src="https://tab.pixellab.ro/pixeltab-top.js"></script>
 </head>
 
-<body>
+<body onload="console.log(prompt('Bine ai venit, cati ani ai?'))">
+  <script src="app.js"></script>
+
+  <h1 onclick="alert('Invat JavaScript la Pixellab.');">Hello</h1>
+
+  <button
+    title="Afiseaza in consola textul"
+    onclick="console.log('Am fost apasat')"
+  >Consola
+  </button>
+
+  <button
+    title="Afiseaza in alerta textul"
+    onclick="alert('Butonul a fost apasat')"
+  >
+    Alert</button>
 
 
+  <button
+    title="Confirmare"
+    onmouseover="console.log('Ai vrea sa apesi acest buton?');"
+    onclick="console.log(prompt('Care este numele tau?'))"
+  >Confirmare</button>
   <div
     class="pixeltab-host"
     id="js01-02-05"
