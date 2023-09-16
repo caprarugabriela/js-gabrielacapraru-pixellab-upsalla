@@ -69,3 +69,57 @@ console.warn(
   `Afiseaza propozitia “xxx yyy cumpara ppp produse in total”;
   folosind accesul direct la fiecare din obiectele din arrayul products.`,
 );
+console.log(
+  cart.firstName +
+    ' ' +
+    cart.lastName +
+    ' cumpara ' +
+    (cart.products[0].quantity +
+      cart.products[1].quantity +
+      cart.products[2].quantity) +
+    ' produse in total.',
+);
+
+console.warn(
+  `Afiseaza propozitia “Sunt xxx si cumpar produsele p1, p2 si p3.”; folosind accesul direct la fiecare din obiectele din arrayul products.`,
+);
+console.log(
+  'Sunt ' +
+    cart.firstName +
+    ' si cumpar produsele ' +
+    cart.products[0].name +
+    ', ' +
+    cart.products[1].name +
+    ' si ' +
+    cart.products[2].name +
+    '.',
+);
+
+console.warn(
+  `“Valoarea totala a cartului cu idul iii este ttt.”;
+  folosind accesul direct la fiecare din obiectele din arrayul products (price, quantity). (product[0].price * product[0].quantity )`,
+);
+console.log(
+  'Valoarea totala a cartului cu idul ' +
+    cart.id +
+    ' este ' +
+    (cart.products[0].price * cart.products[0].quantity +
+      cart.products[1].price * cart.products[1].quantity +
+      cart.products[2].price * cart.products[2].quantity) +
+    '.',
+);
+
+console.warn(`Afiseaza propozitia ”xxx yyy a cumparat produsul ppp in cantitatea ccc in valoare totala de ttt.”
+Foloseste produsul de pe indexul 0.`);
+console.log(
+  cart.firstName +
+    ' ' +
+    cart.lastName +
+    ' a cumparat produsul ' +
+    cart.products[0].name +
+    ' in cantitatea ' +
+    cart.products[0].quantity +
+    ' in valoare totala de ' +
+    cart.products[0].price * cart.products[0].quantity +
+    '.',
+);
