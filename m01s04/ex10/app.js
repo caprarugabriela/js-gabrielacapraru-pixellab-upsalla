@@ -76,3 +76,34 @@ person.friends.forEach(function (friend, index, friends) {
   message += friend.name + ' ' + friend.surname + punctuation;
 });
 console.log(message);
+
+console.warn(`
+Afiseaza fraza: "Intre Dragos si Larry este o diferenta de xx ani. Intre Dragos si Steven... "
+`);
+var message = ' ';
+person.friends.forEach(function (friend, index, friends) {
+  var ageDiff = Math.abs(person.age - friend.age);
+  var punctuation = friends.length - 1 === index ? '.' : '. ';
+  // var punctuation = '';
+  // if (friends.length - 1 === index) {
+  //   punctuation = '.';
+  // } else {
+  //   punctuation = '. ';
+  // }
+
+  message += `Intre ${person.name} si ${friend.name} este o diferenta de ${ageDiff} ani${punctuation}`;
+});
+console.log(message.trim());
+
+console.warn(
+  `Folosind metoda reverse si apoi forEach, afiseaza in ordine inversa elementele arrayului skills.`,
+);
+
+// slice fara paramteri creeaza O CLONA
+// slice without parameters will CLONE the array
+person.skills
+  .slice()
+  .reverse()
+  .forEach(function (skill) {
+    console.log(skill);
+  });

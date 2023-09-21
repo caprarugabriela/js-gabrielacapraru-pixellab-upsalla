@@ -104,8 +104,8 @@ console.warn(`
 `);
 var message = '';
 for (var i = 0; i < person.friends.length; i++) {
-  var friend = person.friends[i];
-  var ageDiff = Math.abs(person.age - friend.age);
+  const friend = person.friends[i];
+  const ageDiff = Math.abs(person.age - friend.age);
 
   if (friend.age % 2 !== 0) {
     message =
