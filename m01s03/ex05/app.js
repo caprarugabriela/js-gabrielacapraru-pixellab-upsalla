@@ -79,15 +79,7 @@ console.log(
 console.warn(
   `Afiseaza propozitia “Sunt xxx si stiu HTML si CSS.”. Nu folosi valoarea din arrayul de skills.`,
 );
-console.log(
-  'Sunt ' +
-    person.name +
-    ' si stiu ' +
-    person.skills[0] +
-    ' si ' +
-    person.skills[2] +
-    '.',
-);
+console.log('Sunt ' + person.name + ' si stiu HTML si CSS' + '.');
 
 console.warn(
   `Afiseaza propozitia “Am x prieteni: Larryson, Stevenson si Carolson.”. Foloseste proprietatea length si
