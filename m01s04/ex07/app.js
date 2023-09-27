@@ -21,7 +21,14 @@ var friends = [
   },
 ];
 
-// insert code
+console.warn(`Folosind o bucla for, afiseaza proprietatea surname a tuturor obiectelor din arrayul friends.
+`);
+for (var i = 0; i < friends.length; i++) {
+  var friend = friends[i];
+  var friendSurname = friend.surname;
+
+  console.log(friendSurname);
+}
 
 console.warn(`
   Afiseaza numele complet inversat al tuturor
@@ -60,4 +67,21 @@ for (var i = 0; i < friends.length; i++) {
   console.log(
     friend.surname + ' ' + friend.name + ' are mai mult de 13 caractere.',
   );
+}
+
+console.warn(`Folosind o bucla for, afiseaza proprietatea name a tuturor obiectelor din arrayul friends.
+`);
+for (var i = 0; i < friends.length; i++) {
+  var friend = friends[i];
+  var friendName = friend.name;
+
+  console.log(friendName);
+}
+
+console.warn(`Afiseaza numele complet al tuturor prietenilor.`);
+for (var i = 0; i < friends.length; i++) {
+  var friend = friends[i];
+  var friendCompleteName = friend.name + ' ' + friend.surname;
+
+  console.log(friendCompleteName);
 }
