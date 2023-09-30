@@ -31,3 +31,19 @@ console.warn(`
 const field3Yield = calculateRectangleArea(400, 370) * barleyYield;
 const field3BeerYield = field3Yield * beerYield;
 console.log(field3BeerYield);
+
+console.warn(`Stiind ca un camp dreptunghiular de grau produce 32kg/m2  de faina,
+ afla si afiseaza cate kilograme de paine produce un camp de 300 pe 200 metri,
+ stiind ca dintr-un kilogram de faina ies 2.5 kg de paine.`);
+
+const wheat = 32;
+const wheatYield = 2.5 / 1;
+const field1wheatYield = wheat * calculateRectangleArea(300, 200);
+
+console.log(wheatYield * field1wheatYield);
+
+console.warn(`Dar doua campuri de 150 pe 200 si 500 pe 300 in total?`);
+const field2wheatYield =
+  wheat * calculateRectangleArea(150, 200) +
+  wheat * calculateRectangleArea(500, 300);
+console.log(wheatYield * field2wheatYield);
