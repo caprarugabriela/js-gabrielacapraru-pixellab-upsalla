@@ -42,3 +42,17 @@
     }
   });
 })();
+
+console.warn(`Adauga un buton in document pe care cand apesi, sunt eliminate celelate butoane cu metoda .remove()
+(puteti sa-l scrieti direct in HTML cu id=”removeButtons. Folosind metoda confirm(),
+modifica codul de la punctul anterior astfel incat utilizatorul sa confirme eliminarea elementelor din DOM:
+“Esti sigur ca vrei sa stergi butoanele din DOM?”.
+”)
+`);
+
+removeEventsButton.addEventListener('click', function () {
+  if (confirm('Esti sigur ca vrei sa stergi butoanele din DOM?') === true) {
+    showButton.remove();
+    toggleEventButton.remove();
+  }
+});
