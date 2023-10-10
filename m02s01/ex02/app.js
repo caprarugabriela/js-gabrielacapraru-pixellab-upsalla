@@ -20,17 +20,14 @@ class Vehicle {
   }
 
   accelerate() {
-    this.speed++;
-
     this.setSpeed(this.speed + 1);
   }
 
   decelerate() {
-    this.speed--;
-
     this.setSpeed(this.speed - 1);
   }
 
+  // speed = 5 -> parametru
   setSpeed(speed = 5) {
     if (speed > this.topSpeed) {
       speed = this.topSpeed;
@@ -40,6 +37,7 @@ class Vehicle {
       speed = this.topReverseSpeed;
     }
 
+    // proprietatea de pe instanta este tot speed - exemplu bun pt incapsulare (atributele unei entitati sunt inchise in instanta in cazul acesta)
     this.speed = speed;
     this.displaySpeed();
   }
@@ -56,7 +54,7 @@ class Bicycle extends Vehicle {
     super(make, color, 2, speed, topSpeed, 0);
   }
 
-  // exemplu naiv de polimorfism
+  // exemplu naiv de polimorfism - forteaza this.speed = 0, nu foloseste topReverseSpeed
   decelerate() {
     if (--this.speed < 0) {
       this.speed = 0;
