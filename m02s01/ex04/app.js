@@ -13,6 +13,8 @@ class Car {
     this.positionY = top;
     this.color = color;
 
+    this.isLightOn = false;
+
     this.frame = this.e('div');
     this.frame.classList.add('frame');
     this.frame.style.left = this.positionX + 'px';
@@ -74,6 +76,34 @@ class Car {
     return this;
   }
 
+  changeTireColor(wheelBackColor, wheelFrontColor) {
+    this.wheelBack.style.backgroundColor = wheelBackColor;
+
+    this.wheelFront.style.backgroundColor = wheelFrontColor;
+
+    return this;
+  }
+
+  changeCapColor(hubCapBack, hubCapFront) {
+    this.hubCapBack.style.backgroundColor = hubCapBack;
+
+    this.hubCapFront.style.backgroundColor = hubCapFront;
+
+    return this;
+  }
+
+  engageBreak() {
+    this.lightBack.classList.add('light--on');
+
+    return this;
+  }
+
+  disenagageBreak() {
+    this.ligthBack.classList.remove('light--on');
+
+    return this;
+  }
+
   // doi parametri: top nou si left nou, daca nu sunt definite si nu sunt numere -> exit early return
 
   move(left, top) {
@@ -102,3 +132,10 @@ const purpleCar = new Car(200, 300, 'purple').render();
 
 // (JS) modul in care obtinem instanta depinde de patternul de programare pe care il folosim,
 // daca folosim un obiect literal - in OOP se numeste single thor (un singur obiect care nu poate fi instantiat)
+purpleCar.changeCapColor('pink', 'pink');
+purpleCar.changeTireColor('plum', 'plum');
+
+purpleCar.toggleHazards(); // Aprinde luminile de avarie
+setTimeout(() => {
+  purpleCar.toggleHazards(); // Stinge luminile de avarie după un interval de timp
+}, 3000);

@@ -70,3 +70,28 @@ bike.setSpeed(2);
 bike.decelerate();
 bike.decelerate();
 bike.decelerate();
+
+class Tricycle extends Vehicle {
+  constructor(make, color, speed, topSpeed) {
+    super(make, color, 3, speed, topSpeed, 0);
+  }
+}
+
+const trike = new Tricycle('Tryke', 'red', 2, 9, -2);
+trike.speed = 0;
+for (let i = 0; i < 3; i++) {
+  trike.decelerate();
+}
+
+trike.speed = -10;
+console.log(`Viteza tricicleta: ${trike.speed}`);
+
+const extraCar = new Car('audi', 'blue', 3, 140, -50);
+extraCar.setSpeed(140);
+
+for (let i = 0; i < 3; i++) {
+  extraCar.accelerate();
+  console.log(`Viteza dupa accelerare este ${extraCar.speed}`);
+}
+
+// datorita conditiilor de evitare a supraccelerarii si subaccelerarii, vehiculele nu vor depasi valorile maxime topSpeed si topReversespeed
