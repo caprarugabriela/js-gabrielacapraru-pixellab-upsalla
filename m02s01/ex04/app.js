@@ -8,6 +8,11 @@
 // left: 100, top: 200, background: purple;
 
 class Car {
+  // clases are sintactic sugar
+  // putem adauga proprietati pe aceasta instanta (o modalitate)
+  isLightOn = false;
+  intervalId = -1;
+
   constructor(left = 10, top = 10, color = 'black') {
     this.positionX = left;
     this.positionY = top;
@@ -66,15 +71,51 @@ class Car {
 
   turnLightOn() {
     this.lightFront.classList.add('light--on');
+    this.isLightOn = true;
 
     return this;
   }
 
   turnLightOff() {
     this.lightFront.classList.remove('light--on');
+    this.isLightOn = false;
 
     return this;
   }
+
+  // Rezolvare clasa - toggleHazards (avariile de la masina)
+  toggleHazards() {
+    // stop interval; oprim practic avariile masinii
+    if (this.intervalId > 0) {
+      clearInterval(this.intervalId);
+      this.intervalId = -1;
+
+      // aici pornim intervalul;
+      if (this.isLightOn === true) {
+        this.lightFront.classList.add('light--on');
+      } else {
+        this.lightFront.classList.remove('light--on');
+      }
+
+      return;
+      // super important => returnul este ca un break
+    }
+
+    // asincron
+    // setInterval seamana cu setTimeout, dar
+    // setInterval ruleaza functia la un anumit interval
+    // setTimemout asteapta un pic si apoi ruleaza codul
+
+    // metoda de prezervare a this
+    // post 2016
+    this.intervalId = setInterval(() => {
+      this.lightFront.classList.toggle('light--on');
+    }, 800);
+  }
+
+  // setInterval = ruleaza
+
+  // doi parametri: top nou si left nou, daca nu sunt definite si nu sunt numere -> exit early return
 
   changeTireColor(wheelBackColor, wheelFrontColor) {
     this.wheelBack.style.backgroundColor = wheelBackColor;
@@ -104,8 +145,6 @@ class Car {
     return this;
   }
 
-  // doi parametri: top nou si left nou, daca nu sunt definite si nu sunt numere -> exit early return
-
   move(left, top) {
     const positionX = Number(left);
     const positionY = Number(top);
@@ -134,8 +173,3 @@ const purpleCar = new Car(200, 300, 'purple').render();
 // daca folosim un obiect literal - in OOP se numeste single thor (un singur obiect care nu poate fi instantiat)
 purpleCar.changeCapColor('pink', 'pink');
 purpleCar.changeTireColor('plum', 'plum');
-
-purpleCar.toggleHazards(); // Aprinde luminile de avarie
-setTimeout(() => {
-  purpleCar.toggleHazards(); // Stinge luminile de avarie după un interval de timp
-}, 3000);

@@ -21,6 +21,8 @@ function renderSkillInput() {
   const skillInputButton = document.createElement('button');
   skillInputButton.title = 'Adauga Skill';
   skillInputButton.innerText = ' + ';
+  // daca vrem sa evitam transmiterea formularului (gen submit) pun MEREU BUTTON TYPE=BUTTON
+  skillInputButton.type = 'button';
 
   // La fiecare apasare a butonului, daca in input exista text, afiseaza abilitatea noua intr-o lista neordonata.
   skillInputButton.addEventListener('click', function (event) {
@@ -54,7 +56,17 @@ function renderSkillsUl(skillName) {
   }
 
   const skillLi = document.createElement('li');
-  skillLi.innerText = skillName;
+
+  // Imbracam textul skillului intr-un span pentru a da functionalitate butonului de edit
+  const skillText = document.createElement('span');
+  skillText.classList.add('skillText');
+  skillText.innerText = skillName;
+
+  // Am creat langa text un input type hidden cu valoarea skillului
+  const skillInput = document.createElement('input');
+  skillInput.type = 'hidden';
+  skillInput.name = `skill-${skillName}`;
+  skillInput.value = skillName;
 
   // In dreptul fiecarui element din lista adauga un buton de stergere.
 
@@ -69,7 +81,36 @@ function renderSkillsUl(skillName) {
   // deteleSkillButton.addEventListener ('click', function() { alert('test')}); - multe probleme mai ales cand avem mai multe li-uri - de evitat;
   // rezolvarea se va face dupa form reset prin metoda addEventListener pe FORM
 
+  // In dreptul fiecarei abilitati din lista neordonata adauga si un buton de editare.
+  const editSkillButton = document.createElement('button');
+  editSkillButton.type = 'button';
+  editSkillButton.innerText = 'Editeaza';
+  editSkillButton.title = 'Editeaza Skill';
+  editSkillButton.classList.add('editSkillButton');
+
+  // Am creat butonul de Cancel edit care este by default ascuns
+  const cancelEditSkillButton = document.createElement('button');
+  cancelEditSkillButton.type = 'button';
+  cancelEditSkillButton.innerText = 'Cancel';
+  cancelEditSkillButton.title = 'Cancel Edit';
+  cancelEditSkillButton.classList.add('cancelEditSkillButton');
+  cancelEditSkillButton.hidden = true;
+
+  // Am creat butonul de Save edit care este by default ascuns
+  const saveSkillButton = document.createElement('button');
+  saveSkillButton.type = 'button';
+  saveSkillButton.innerText = 'Save';
+  saveSkillButton.title = 'Save Edit';
+  saveSkillButton.classList.add('saveSkillButton');
+  cancelEditSkillButton.hidden = true;
+
+  // ordinea conteaza
+  skillLi.append(skillText);
+  skillLi.append(skillInput);
   skillLi.append(deleteSkillButton);
+  skillLi.append(editSkillButton);
+  skillLi.append(cancelEditSkillButton);
+  skillLi.append(saveSkillButton);
 
   skillsUl.append(skillLi);
 
@@ -78,6 +119,7 @@ function renderSkillsUl(skillName) {
 
 // pentru evenimentul de submit adauga un eventlistener care este functia de mai jos;
 // prin event.preventDefault vrem sa prevenim comportamentul normal
+// event delegation
 form.addEventListener('submit', function (event) {
   event.preventDefault();
   const person = {};
@@ -97,7 +139,7 @@ form.addEventListener('submit', function (event) {
 
 // apasare buton stergere -> sterge elementul
 // bubly - evenimentul se intampla pe buton, dupa urca prin fiecare element pana ajunge la document (sau comparatia cu turnul)
-form.addEventListener('click', function () {
+form.addEventListener('click', function (event) {
   // obtain button from DOM
   // target este obiectul DE PE CARE A PLECAT EVENIMENTUL
   const target = event.target;
@@ -118,6 +160,114 @@ form.addEventListener('click', function () {
   // DOM tranversal
   // button.parentElement.remove()
   deleteSkillButton.parentElement.remove();
+});
+
+// apasare buton editare -> editeaza elementul
+form.addEventListener('click', function (event) {
+  // target este obiectul DE PE CARE A PLECAT EVENIMENTUL
+  const target = event.target;
+
+  // check if actual button (vedem daca este butonul corect)
+  if (
+    target.nodeName !== 'BUTTON' ||
+    !target.classList.contains('editSkillButton')
+  ) {
+    return;
+  }
+
+  // readability hack
+  const editSkillButton = target;
+
+  //  hide delete button
+  editSkillButton.parentElement.querySelector(
+    '.deleteSkillButton',
+  ).hidden = true;
+
+  // hide skillText
+  editSkillButton.parentElement.querySelector('.skillText').hidden = true;
+
+  // hide actual edit button
+  editSkillButton.hidden = true;
+
+  // change type hidden in text
+  editSkillButton.parentElement.querySelector('input[name^="skill-"]').type =
+    'text';
+
+  // show cancel btn - afiseaza butonul de cancel
+  editSkillButton.parentElement.querySelector(
+    '.cancelEditSkillButton',
+  ).hidden = false;
+
+  // show save btn -  afiseaza butonul de save
+  editSkillButton.parentElement.querySelector(
+    '.saveSkillButton',
+  ).hidden = false;
+});
+
+// // event delegation for cancelEditSkillButton -> facem sa mearga butonul de cancel
+form.addEventListener('click', function (event) {
+  const target = event.target;
+
+  if (
+    target.nodeName !== 'BUTTON' ||
+    !target.classList.contains('cancelEditSkillButton')
+  ) {
+    return;
+  }
+
+  const cancelButton = target;
+  const parentElement = cancelButton.parentElement;
+
+  // show span.SkillLi
+  parentElement.querySelector('.skillText').hidden = false;
+  // show button.editSkillButton
+  parentElement.querySelector('.editSkillButton').hidden = false;
+  // show button.deleteSkillButton
+  parentElement.querySelector('.deleteSkillButton').hidden = false;
+  // hide this buttton - cancelbtn
+  cancelButton.hidden = true;
+  // hide saveSkillButton
+  parentElement.querySelector('.saveSkillButton').hidden = true;
+  // change type from text to hidden on input
+  parentElement.querySelector('[name^="skill-"]').type = 'hidden';
+});
+
+// event delegation for saveSkillButton -> facem sa mearga butonul de Save
+form.addEventListener('click', function (event) {
+  const target = event.target;
+
+  if (
+    target.nodeName !== 'BUTTON' ||
+    !target.classList.contains('saveSkillButton')
+  ) {
+    return;
+  }
+
+  const saveSkillButton = target;
+  const parentElement = saveSkillButton.parentElement;
+
+  // copy value from input to skillText
+  // (tema, early return)
+  const skillInput = parentElement.querySelector('input[name^="skill-"]');
+  const value = skillInput.value;
+
+  // insert code here
+
+  const skillText = parentElement.querySelector('.skillText');
+  skillText.innerText = value;
+  skillText.hidden = false;
+
+  // hide this button
+  saveSkillButton.hidden = true;
+
+  // hide cancel
+  parentElement.querySelector('.cancelEditSkillButton').hidden = true;
+  // change type to
+  skillInput.type = 'hidden';
+  // show edit
+  parentElement.querySelector('.editSkillButton').hidden = false;
+  // show delete
+  parentElement.querySelector('.deleteSkillButton').hidden = false;
 });
 
 // hoisted
