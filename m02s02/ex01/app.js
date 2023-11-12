@@ -24,6 +24,7 @@ function renderSkillInput() {
   // daca vrem sa evitam transmiterea formularului (gen submit) pun MEREU BUTTON TYPE=BUTTON
   skillInputButton.type = 'button';
 
+  // refactor
   // La fiecare apasare a butonului, daca in input exista text, afiseaza abilitatea noua intr-o lista neordonata.
   skillInputButton.addEventListener('click', function (event) {
     const button = event.currentTarget;
@@ -35,12 +36,25 @@ function renderSkillInput() {
     }
 
     button.after(renderSkillsUl(skillValue));
-
-    // add keydown addeventlistener pentru skillInput
-
-    // cream lista neordonata langa buton
-    // renderSkillUl(skillValue)
+    skillInput.value = '';
   });
+
+  // add keydown addeventlistener pentru skillInput
+  skillInput.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      const skillValue = skillInput.value.trim();
+      event.preventDefault();
+
+      if (skillValue.length > 0) {
+        const button = skillInput.nextElementSibling;
+        button.after(renderSkillsUl(skillValue));
+        skillInput.value = '';
+      }
+    }
+  });
+
+  // cream lista neordonata langa buton
+  // renderSkillUl(skillValue)
 
   container.append(skillInput);
   container.append(skillInputButton);
@@ -104,7 +118,7 @@ function renderSkillsUl(skillName) {
   saveSkillButton.innerText = 'Save';
   saveSkillButton.title = 'Save Edit';
   saveSkillButton.classList.add('saveSkillButton');
-  cancelEditSkillButton.hidden = true;
+  saveSkillButton.hidden = true;
 
   // ordinea conteaza
   skillLi.append(skillText);
@@ -133,6 +147,7 @@ form.addEventListener('submit', function (event) {
   person.surname = form.surname.value;
   person.age = form.age.value;
   person.skills = [];
+  person.friends = [];
 
   // extragem campurile prefixate cu skill- din form
   const skillNames = form.querySelectorAll('input[name^="skill-"]');
@@ -146,9 +161,18 @@ form.addEventListener('submit', function (event) {
     person.skills.push(skillInput.value);
   });
 
+  const friendNames = form.querySelectorAll('input[name^="friend-"]');
+  friendNames.forEach(function (friendInput) {
+    person.friends.push(friendInput.value);
+  });
+
   clearDisplay();
   const personDisplay = render(person);
   form.after(personDisplay);
+
+  // asemenator cu clearDisplay
+  clearSkillsDisplay();
+  clearFriendsDisplay();
 
   form.reset();
 });
@@ -167,12 +191,11 @@ form.addEventListener('click', function (event) {
     target.nodeName !== 'BUTTON' ||
     !target.classList.contains('deleteSkillButton')
   ) {
-    // return early;
+    // return early
     return;
   }
   // readability hack
   const deleteSkillButton = target;
-
   // DOM tranversal
   // button.parentElement.remove()
   deleteSkillButton.parentElement.remove();
@@ -263,26 +286,22 @@ form.addEventListener('click', function (event) {
 });
 
 // enter -> buton de save/submit(?)
-form.children[1].addEventListener(
-  'keypress',
-  function (event) {
-    const target = event.target;
+form.children[1].addEventListener('keydown', function (event) {
+  const target = event.target;
 
-    if (
-      target.nodeName !== 'INPUT' ||
-      !target.name.startsWith('skill-') ||
-      event.key !== 'Enter'
-    ) {
-      return;
-    }
+  if (
+    target.nodeName !== 'INPUT' ||
+    !target.name.startsWith('skill-') ||
+    event.key !== 'Enter'
+  ) {
+    return;
+  }
 
-    event.stopPropagation();
-    event.preventDefault();
+  event.stopPropagation();
+  event.preventDefault();
 
-    saveSkill(target);
-  },
-  true,
-);
+  saveSkill(target);
+});
 
 function saveSkill(target) {
   const parentElement = target.parentElement;
@@ -300,6 +319,8 @@ function saveSkill(target) {
 
   // hide cancel
   parentElement.querySelector('.cancelEditSkillButton').hidden = true;
+  // hide save
+  parentElement.querySelector('.saveSkillButton').hidden = true;
   // change type to
   skillInput.type = 'hidden';
   // show edit
@@ -319,6 +340,22 @@ function clearDisplay() {
   }
 }
 
+function clearSkillsDisplay() {
+  const skillsDisplay = document.querySelector('.skillsUl');
+
+  if (skillsDisplay !== null) {
+    skillsDisplay.remove();
+  }
+}
+
+function clearFriendsDisplay() {
+  const friendsDisplay = document.querySelector('.friendsUl');
+
+  if (friendsDisplay !== null) {
+    friendsDisplay.remove();
+  }
+}
+
 function render(person) {
   // in memory
   const personDisplay = document.createElement('div');
@@ -329,6 +366,12 @@ function render(person) {
   const skillsUl = renderSkills(person.skills);
   if (skillsUl !== null) {
     personDisplay.append(skillsUl);
+  }
+
+  // adaugam sectiunea de Friends dupa ce dam submit
+  const friendsUl = renderFriends(person.friends);
+  if (friendsUl !== null) {
+    personDisplay.append(friendsUl);
   }
 
   return personDisplay;
@@ -364,4 +407,117 @@ function renderSkills(skills = []) {
   container.append(ul);
 
   return container;
+}
+// Lista prieteni
+
+// 1. Chemam formularul cu prieteni, creat anterior direct in HTML
+const friendFieldset = form.querySelector('fieldset:nth-child(3)');
+// aici adaugam continutul generat de functia renderFriends
+friendFieldset.append(renderFriend());
+
+// 2.  Permitem introducerea de date in campul de prieteni
+// definim functia renderFriends
+function renderFriend() {
+  const friendContainer = new DocumentFragment();
+
+  // cream inputul pentru a adauga prieten
+  const friendInput = document.createElement('input');
+  friendInput.type = 'text';
+  friendInput.classList.add('addFriend');
+  friendInput.placeholder = 'Adauga Prieteni';
+
+  // adaugam butonul pentru a adauga alti prieteni
+  const addFriendButton = document.createElement('button');
+  addFriendButton.title = 'Adauga Prieteni';
+  addFriendButton.innerText = '+';
+  addFriendButton.type = 'button';
+
+  // facem sa mearga butonul de adaugare - cand dam enter
+  friendInput.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      const friendValue = friendInput.value.trim();
+      event.preventDefault();
+
+      if (friendValue.length > 0) {
+        const button = friendInput.nextElementSibling;
+        button.after(renderFriendsUl(friendValue));
+        friendInput.value = '';
+      }
+    }
+  });
+
+  // facem sa mearga butonul de adaugare - cand dam click pe buton
+  addFriendButton.addEventListener('click', function (event) {
+    const button = event.currentTarget;
+    // DOM traversal - traversarea DOM-ului
+    const friendInput = button.previousElementSibling;
+    const friendValue = friendInput.value;
+    if (friendValue.trim().length < 1) {
+      return;
+    }
+
+    button.after(renderFriendsUl(friendValue));
+    // stergem valoarea din input dupa ce dam submit la buton
+    friendInput.value = '';
+  });
+
+  friendContainer.append(friendInput);
+  friendContainer.append(addFriendButton);
+
+  return friendContainer;
+}
+
+// definim renderFriendsUl
+
+function renderFriendsUl(friendName) {
+  const className = 'friendsUl';
+  let friendsUl = document.querySelector('.' + className);
+
+  if (friendsUl === null) {
+    friendsUl = document.createElement('ul');
+    friendsUl.classList.add(className);
+  }
+
+  const friendLi = document.createElement('li');
+
+  // Imbracam textul skillului intr-un span pentru a da functionalitate butonului de edit
+  const friendText = document.createElement('span');
+  friendText.classList.add('friendText');
+  friendText.innerText = friendName;
+
+  // Am creat langa text un input type hidden cu valoarea skillului
+  const friendInput = document.createElement('input');
+  friendInput.type = 'hidden';
+  friendInput.name = `friend-${friendName}`;
+  friendInput.value = friendName;
+
+  // ordinea conteaza
+  friendLi.append(friendText);
+  friendLi.append(friendInput);
+
+  friendsUl.append(friendLi);
+
+  return friendsUl;
+}
+
+function renderFriends(friends = []) {
+  if (friends.length <= 0) {
+    return null;
+  }
+
+  const friendContainer = new DocumentFragment();
+  const heading = document.createElement('h3');
+  heading.innerText = 'Friends';
+  friendContainer.append(heading);
+
+  const ul = document.createElement('ul');
+  friends.forEach(function (friendName) {
+    const li = document.createElement('li');
+    li.innerText = friendName;
+    ul.append(li);
+  });
+
+  friendContainer.append(ul);
+
+  return friendContainer;
 }
