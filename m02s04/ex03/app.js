@@ -4,11 +4,33 @@ const hero = stage.querySelector('.hero');
 const controls = document.querySelector('.controls');
 
 const axisMotionMap = {
+  N: {
+    y: -1,
+  },
   E: {
     x: 1,
   },
   S: {
     y: 1,
+  },
+  W: {
+    x: -1,
+  },
+  SE: {
+    x: 1,
+    y: 1,
+  },
+  SW: {
+    x: -1,
+    y: 1,
+  },
+  NE: {
+    x: 1,
+    y: -1,
+  },
+  NW: {
+    x: -1,
+    y: -1,
   },
 };
 const keysMap = {
@@ -78,4 +100,13 @@ function updateHeroPosition(axes) {
   }
 
   // insert code for N and W
+  // 0 este originea
+  // fortam sa nu mai iasa din joc (aka din pastratul mare :))
+  if (heroState.x <= 0) {
+    heroState.x = 0;
+  }
+
+  if (heroState.y <= 0) {
+    heroState.y = 0;
+  }
 }
