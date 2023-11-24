@@ -29,5 +29,13 @@
     "compounds": []
   },
   "editor.detectIndentation": false,
-  "liveServer.settings.ignoreFiles": ["./server/api/persons/models/*.data"]
+  "liveServer.settings.ignoreFiles": ["./server/api/persons/models/*.data"],
+  "osfdigital.wingman.workspaceIndexingSettings": {
+    "indexingState": 0
+  },
+  "osfdigital.wingman.knowledgeBaseSettings": {
+    "salesforceDevEnabled": true,
+    "salesforceHelpEnabled": true,
+    "indexedWorkspaceEnabled": false
+  }
 }
