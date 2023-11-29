@@ -1,5 +1,5 @@
 let array1 = [10, 20, 30];
-let array2 = [40, 50];
+let array2 = [...array1, 40, 50];
 
 let array4 = [104, 105];
 let array3 = [101, 102, 103, 106, 107, 108];

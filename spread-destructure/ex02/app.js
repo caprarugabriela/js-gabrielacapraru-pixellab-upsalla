@@ -9,3 +9,5 @@ let array6 = [106, 107, 108];
 
 let array8 = [5, 4, 3, 2, 1];
 let array9 = [];
+
+const array7 = [...array5, 105, ...array6];
