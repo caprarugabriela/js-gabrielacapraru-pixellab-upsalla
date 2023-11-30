@@ -43,3 +43,11 @@ console.log(fullPerson3);
 
 console.warn(`Folosind noul obiect fullPerson3 creeaza intr-un obiect numit
 fullPerson4 cu numele de familie al Andrei care sa se numeasca Anita si sa aiba 36 de ani.`);
+
+const fullPerson4 = {
+  ...fullPerson2,
+  surname: 'Andrason',
+  name: 'Anita',
+  age: 36,
+};
+console.log(fullPerson4);
