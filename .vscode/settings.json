@@ -37,5 +37,6 @@
     "salesforceDevEnabled": true,
     "salesforceHelpEnabled": true,
     "indexedWorkspaceEnabled": false
-  }
+  },
+  "liveServer.settings.port": 5501
 }
